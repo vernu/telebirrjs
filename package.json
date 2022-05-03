@@ -1,0 +1,29 @@
+{
+  "name": "telebirrjs",
+  "version": "0.1.0",
+  "description": "",
+  "keywords": [
+    "telebirr",
+    "payment",
+    "fintech",
+    "ethiopia"
+  ],
+  "main": "telebirr.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vernu/telebirrjs.git"
+  },
+  "author": "@vernu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vernu/telebirrjs/issues"
+  },
+  "homepage": "https://github.com/vernu/telebirrjs#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "node-rsa": "^1.1.1"
+  }
+}
