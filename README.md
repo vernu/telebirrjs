@@ -23,8 +23,28 @@ const { success, response } = await telebirr.makePayment({
   outTradeNo: 'unique identifier (order no)',
   receiveName: 'company name',
   returnApp: 'com.example.app', // your application package name
-  returnUrl: 'redirect url after payment completion',
+  returnUrl: 'https://yourwebsite.com', // redirect url after payment completion'
   subject: 'payment for',
   timeoutExpress: '120', // valid for 2 hours
 })
+```
+
+## Handling callback notifications
+
+- once user completes the payment, you'll receive an encrypted plaintext on the `notifyUrl` you provided.
+
+- Make sure the endpoint accepts `plaintext` request body
+
+- you need to decrypt the text to get the transaction details
+
+```javascript
+const {
+  msisdn, // the phone number from which the payment was done
+  outTradeNo, // unique identifier provided when creating the payment
+  totalAmount,
+  tradeDate,
+  tradeNo,
+  tradeStatus,
+  transactionNo,
+} = telebirr.getDecryptedCallbackNotification(encryptedTextFromTelebirr)
 ```

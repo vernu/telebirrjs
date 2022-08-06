@@ -22,7 +22,7 @@ class Telebirr {
     totalAmount,
     outTradeNo,
     receiveName,
-    returnApp,
+    returnApp='com.example.app',
     returnUrl,
     subject,
     timeoutExpress = `${24 * 60}`, // 1 day
@@ -60,14 +60,16 @@ class Telebirr {
     }
   }
 
-  encrypt(rawData) {
-    const key = `-----BEGIN PUBLIC KEY-----\n${this.publicKey}\n-----END PUBLIC KEY-----`
-
-    const rsaKey = new NodeRSA(key, 'public', {
-      encryptionScheme: 'pkcs1',
-    })
-    const data = Buffer.from(JSON.stringify(rawData))
-    return rsaKey.encrypt(data, 'base64', 'utf8')
+  encrypt(payload) {
+    const rsaKey = new NodeRSA(
+      `-----BEGIN PUBLIC KEY-----\n${this.publicKey}\n-----END PUBLIC KEY-----`,
+      'public',
+      {
+        encryptionScheme: 'pkcs1',
+      }
+    )
+    const dataToEncrypt = Buffer.from(JSON.stringify(payload))
+    return rsaKey.encrypt(dataToEncrypt, 'base64', 'utf8')
   }
 
   signData(fields) {
@@ -77,6 +79,22 @@ class Telebirr {
       .join('&')
 
     return crypto.createHash('sha256').update(encodedFields).digest('hex')
+  }
+
+  decryptPublic(dataToDecrypt) {
+    const rsaKey = new NodeRSA(
+      `-----BEGIN PUBLIC KEY-----\n${this.publicKey}\n-----END PUBLIC KEY-----`,
+      'public',
+      {
+        encryptionScheme: 'pkcs1',
+      }
+    )
+    return rsaKey.decryptPublic(dataToDecrypt, 'utf8')
+  }
+
+  getDecryptedCallbackNotification(encryptedText) {
+    const decryptedText = this.decryptPublic(encryptedText)
+    return JSON.parse(decryptedText)
   }
 }
 
